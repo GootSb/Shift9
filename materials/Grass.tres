@@ -1,0 +1,9 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cqi34dt38dl6d"]
+
+[ext_resource type="Texture2D" uid="uid://dptdrhlwtwmrr" path="res://grass.jpg" id="1_d3pgk"]
+
+[resource]
+albedo_color = Color(0.70796657, 0.7079665, 0.7079665, 1)
+albedo_texture = ExtResource("1_d3pgk")
+uv1_scale = Vector3(30, 30, 30)
+uv1_triplanar = true

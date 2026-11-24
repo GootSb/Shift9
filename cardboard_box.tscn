@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://d1i5rout42suu"]
+
+[ext_resource type="Material" uid="uid://b0joi6r3g86ik" path="res://materials/Cardboard.tres" id="1_g2tbl"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oyhfb"]
+material = ExtResource("1_g2tbl")
+
+[node name="CardboardBox" type="RigidBody3D" unique_id=1521493742 groups=["Interactable"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=404048196]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1371454903]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+mesh = SubResource("BoxMesh_oyhfb")

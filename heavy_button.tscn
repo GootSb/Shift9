@@ -1,0 +1,69 @@
+[gd_scene format=3 uid="uid://bv5smdy3cxlwa"]
+
+[ext_resource type="Material" uid="uid://c1cxpc5e55o7e" path="res://materials/ButtonOff.tres" id="1_4bwnv"]
+[ext_resource type="Script" uid="uid://sceeyxnweplh" path="res://heavy_button.gd" id="1_8oeke"]
+[ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="2_8oeke"]
+[ext_resource type="AudioStream" uid="uid://cny6oohmo0ru6" path="res://sounds/On.mp3" id="3_x5qhw"]
+[ext_resource type="AudioStream" uid="uid://c14n53mp3km6h" path="res://sounds/Off.mp3" id="4_hvxk8"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_lirlb"]
+material = ExtResource("1_4bwnv")
+
+[sub_resource type="BoxMesh" id="BoxMesh_olmnl"]
+material = ExtResource("2_8oeke")
+
+[sub_resource type="BoxMesh" id="BoxMesh_2sv3y"]
+material = ExtResource("2_8oeke")
+
+[sub_resource type="BoxMesh" id="BoxMesh_i2lvi"]
+material = ExtResource("2_8oeke")
+
+[sub_resource type="BoxMesh" id="BoxMesh_smshx"]
+material = ExtResource("2_8oeke")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_tww7p"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_yfuvd"]
+
+[node name="HeavyButton" type="StaticBody3D" unique_id=1656311092]
+script = ExtResource("1_8oeke")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1893403816]
+transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 1, 0, 0, 0)
+mesh = SubResource("BoxMesh_lirlb")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1243874812]
+transform = Transform3D(0.099793, 0, 0, 0, 0.17712143, 0, 0, 0, 1.2, -0.5504155, -0.011278149, 0)
+mesh = SubResource("BoxMesh_olmnl")
+
+[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=290596186]
+transform = Transform3D(0.099793, 0, 0, 0, 0.17712143, 0, 0, 0, 1.2, 0.55212915, -0.0110838, 0)
+mesh = SubResource("BoxMesh_2sv3y")
+
+[node name="MeshInstance3D6" type="MeshInstance3D" parent="." unique_id=1498190277]
+transform = Transform3D(-4.362091e-09, 0, -1.2000002, 0, 0.17712145, 0, 0.099793, 0, -5.2453668e-08, -0.00013847728, -0.011278149, -0.550277)
+mesh = SubResource("BoxMesh_i2lvi")
+
+[node name="MeshInstance3D7" type="MeshInstance3D" parent="." unique_id=1342230349]
+transform = Transform3D(-4.362091e-09, 0, -1.2000002, 0, 0.17712145, 0, 0.099793, 0, -5.2453668e-08, -0.00013852536, -0.0110838, 0.55013853)
+mesh = SubResource("BoxMesh_smshx")
+
+[node name="DetectionArea" type="Area3D" parent="." unique_id=1123746945]
+visible = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DetectionArea" unique_id=1618078106]
+transform = Transform3D(1.1, 0, -9.616505e-08, 0, 0.24923241, 0, 9.616505e-08, 0, 1.1, 0, -0.011945903, 0)
+shape = SubResource("BoxShape3D_tww7p")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=315355707]
+transform = Transform3D(1.2, 0, 0, 0, 0.19197446, 0, 0, 0, 1.204, 0, 0.013883561, 0)
+visible = false
+shape = SubResource("BoxShape3D_yfuvd")
+
+[node name="Off" type="AudioStreamPlayer3D" parent="." unique_id=52188281]
+stream = ExtResource("3_x5qhw")
+volume_db = 20.935
+
+[node name="On" type="AudioStreamPlayer3D" parent="." unique_id=767117742]
+stream = ExtResource("4_hvxk8")
+volume_db = -13.458

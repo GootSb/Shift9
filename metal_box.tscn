@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dpivjdunvnc7k"]
+
+[ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="1_b6jb6"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_g4v7s"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_oyhfb"]
+material = ExtResource("1_b6jb6")
+
+[node name="MetalBox" type="RigidBody3D" unique_id=1521493742 groups=["Heavy", "Interactable"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=404048196]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+shape = SubResource("BoxShape3D_g4v7s")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1371454903]
+transform = Transform3D(0.9, 0, 0, 0, 0.9, 0, 0, 0, 0.9, 0, 0, 0)
+mesh = SubResource("BoxMesh_oyhfb")
