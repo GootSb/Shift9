@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bv5smdy3cxlwa"]
 
 [ext_resource type="Material" uid="uid://c1cxpc5e55o7e" path="res://materials/ButtonOff.tres" id="1_4bwnv"]
-[ext_resource type="Script" uid="uid://sceeyxnweplh" path="res://heavy_button.gd" id="1_8oeke"]
+[ext_resource type="Script" uid="uid://sceeyxnweplh" path="res://scripts/heavy_button.gd" id="1_8oeke"]
 [ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="2_8oeke"]
 [ext_resource type="AudioStream" uid="uid://cny6oohmo0ru6" path="res://sounds/On.mp3" id="3_x5qhw"]
 [ext_resource type="AudioStream" uid="uid://c14n53mp3km6h" path="res://sounds/Off.mp3" id="4_hvxk8"]

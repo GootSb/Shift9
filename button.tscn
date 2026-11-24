@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://gkmf81htmqmh"]
 
-[ext_resource type="Script" uid="uid://b5iwnimmj5ucc" path="res://button.gd" id="1_2jhg7"]
+[ext_resource type="Script" uid="uid://b5iwnimmj5ucc" path="res://scripts/button.gd" id="1_2jhg7"]
 [ext_resource type="Material" uid="uid://c1cxpc5e55o7e" path="res://materials/ButtonOff.tres" id="2_ovg3t"]
 [ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="3_l7yfx"]
 [ext_resource type="AudioStream" uid="uid://c14n53mp3km6h" path="res://sounds/Off.mp3" id="4_k706f"]

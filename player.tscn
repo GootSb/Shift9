@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://bfuoos16oeknp"]
 
-[ext_resource type="Script" uid="uid://di65o5xakgo2f" path="res://player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://di65o5xakgo2f" path="res://scripts/player.gd" id="1_4flbx"]
 [ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="2_i3pqv"]
-[ext_resource type="Script" uid="uid://cfcrd464t0lnh" path="res://fps_counter.gd" id="2_onrkg"]
+[ext_resource type="Script" uid="uid://cfcrd464t0lnh" path="res://scripts/fps_counter.gd" id="2_onrkg"]
 [ext_resource type="AudioStream" uid="uid://cewgkhwwora0m" path="res://sounds/Electricity.mp3" id="4_hqtel"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_dwbse"]
