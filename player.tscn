@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bfuoos16oeknp"]
 
-[ext_resource type="Script" uid="uid://di65o5xakgo2f" path="res://scripts/player.gd" id="1_4flbx"]
+[ext_resource type="Script" uid="uid://bywwwn2g2gt8v" path="res://scripts/player_testnew.gd" id="1_hqtel"]
 [ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="2_i3pqv"]
 [ext_resource type="Script" uid="uid://cfcrd464t0lnh" path="res://scripts/fps_counter.gd" id="2_onrkg"]
 [ext_resource type="AudioStream" uid="uid://cewgkhwwora0m" path="res://sounds/Electricity.mp3" id="4_hqtel"]
@@ -11,7 +11,7 @@
 material = ExtResource("2_i3pqv")
 
 [node name="Player" type="CharacterBody3D" unique_id=477170792]
-script = ExtResource("1_4flbx")
+script = ExtResource("1_hqtel")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=387736613]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)

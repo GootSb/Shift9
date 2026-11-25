@@ -1,7 +1,10 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://davy0aohn5gpg"]
 
+[ext_resource type="Texture2D" uid="uid://c43v4675kh5dd" path="res://textures/metal.jpg" id="1_mk553"]
+
 [resource]
-albedo_color = Color(0.40832943, 0.4083295, 0.40832937, 1)
+albedo_color = Color(0.556953, 0.556953, 0.55695313, 1)
+albedo_texture = ExtResource("1_mk553")
 metallic = 0.4
 metallic_specular = 0.39
 roughness = 0.45

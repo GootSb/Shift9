@@ -12,15 +12,6 @@ material = ExtResource("1_4bwnv")
 [sub_resource type="BoxMesh" id="BoxMesh_olmnl"]
 material = ExtResource("2_8oeke")
 
-[sub_resource type="BoxMesh" id="BoxMesh_2sv3y"]
-material = ExtResource("2_8oeke")
-
-[sub_resource type="BoxMesh" id="BoxMesh_i2lvi"]
-material = ExtResource("2_8oeke")
-
-[sub_resource type="BoxMesh" id="BoxMesh_smshx"]
-material = ExtResource("2_8oeke")
-
 [sub_resource type="BoxShape3D" id="BoxShape3D_tww7p"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_yfuvd"]
@@ -33,20 +24,8 @@ transform = Transform3D(1, 0, 0, 0, 0.2, 0, 0, 0, 1, 0, 0, 0)
 mesh = SubResource("BoxMesh_lirlb")
 
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="." unique_id=1243874812]
-transform = Transform3D(0.099793, 0, 0, 0, 0.17712143, 0, 0, 0, 1.2, -0.5504155, -0.011278149, 0)
+transform = Transform3D(1.2, 0, 0, 0, 0.177, 0, 0, 0, 1.2, 0, 0, 0)
 mesh = SubResource("BoxMesh_olmnl")
-
-[node name="MeshInstance3D4" type="MeshInstance3D" parent="." unique_id=290596186]
-transform = Transform3D(0.099793, 0, 0, 0, 0.17712143, 0, 0, 0, 1.2, 0.55212915, -0.0110838, 0)
-mesh = SubResource("BoxMesh_2sv3y")
-
-[node name="MeshInstance3D6" type="MeshInstance3D" parent="." unique_id=1498190277]
-transform = Transform3D(-4.362091e-09, 0, -1.2000002, 0, 0.17712145, 0, 0.099793, 0, -5.2453668e-08, -0.00013847728, -0.011278149, -0.550277)
-mesh = SubResource("BoxMesh_i2lvi")
-
-[node name="MeshInstance3D7" type="MeshInstance3D" parent="." unique_id=1342230349]
-transform = Transform3D(-4.362091e-09, 0, -1.2000002, 0, 0.17712145, 0, 0.099793, 0, -5.2453668e-08, -0.00013852536, -0.0110838, 0.55013853)
-mesh = SubResource("BoxMesh_smshx")
 
 [node name="DetectionArea" type="Area3D" parent="." unique_id=1123746945]
 visible = false
