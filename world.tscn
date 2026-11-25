@@ -7,12 +7,10 @@
 [ext_resource type="PackedScene" uid="uid://dpivjdunvnc7k" path="res://metal_box.tscn" id="5_036b0"]
 [ext_resource type="PackedScene" uid="uid://bv5smdy3cxlwa" path="res://heavy_button.tscn" id="6_dwbse"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4rhad"]
-sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
-ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_dwbse"]
 
 [sub_resource type="Sky" id="Sky_dphjl"]
-sky_material = SubResource("ProceduralSkyMaterial_4rhad")
+sky_material = SubResource("PanoramaSkyMaterial_dwbse")
 
 [sub_resource type="Environment" id="Environment_sl2e5"]
 background_mode = 2
@@ -85,9 +83,21 @@ SLOWS PLAYER DOWN"
 font_size = 35
 
 [node name="CardboardBox" parent="." unique_id=1521493742 instance=ExtResource("3_tlwt5")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2, -10)
+transform = Transform3D(0.9659258, 0, 0.25881904, 0, 1, 0, -0.25881904, 0, 0.9659258, 5, 1, -10)
+
+[node name="CardboardBox2" parent="." unique_id=716357054 instance=ExtResource("3_tlwt5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, -10)
+
+[node name="CardboardBox3" parent="." unique_id=462140725 instance=ExtResource("3_tlwt5")]
+transform = Transform3D(0.9659258, 0, -0.25881904, 0, 1, 0, 0.25881904, 0, 0.9659258, 5.6065516, 2, -9.973149)
 
 [node name="MetalBox" parent="." unique_id=836612702 instance=ExtResource("5_036b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 1, -10)
+
+[node name="MetalBox2" parent="." unique_id=1699948826 instance=ExtResource("5_036b0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -10)
+
+[node name="MetalBox3" parent="." unique_id=1178979940 instance=ExtResource("5_036b0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 2, -10)
 
 [node name="Button" parent="." unique_id=921295289 instance=ExtResource("4_aqk2v")]

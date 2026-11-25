@@ -39,10 +39,10 @@ transform = Transform3D(1.2, 0, 0, 0, 0.19197446, 0, 0, 0, 1.204, 0, 0.013883561
 visible = false
 shape = SubResource("BoxShape3D_l7yfx")
 
-[node name="Off" type="AudioStreamPlayer3D" parent="." unique_id=1896726402]
+[node name="On" type="AudioStreamPlayer3D" parent="." unique_id=1896726402]
 stream = ExtResource("5_aeh8o")
-volume_db = 20.935
+volume_db = 38.879
 
-[node name="On" type="AudioStreamPlayer3D" parent="." unique_id=1403532463]
+[node name="Off" type="AudioStreamPlayer3D" parent="." unique_id=1403532463]
 stream = ExtResource("4_k706f")
-volume_db = -13.458
+volume_db = -5.981

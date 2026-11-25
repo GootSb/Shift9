@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bfuoos16oeknp"]
 
-[ext_resource type="Script" uid="uid://bywwwn2g2gt8v" path="res://scripts/player_testnew.gd" id="1_hqtel"]
+[ext_resource type="Script" uid="uid://dunx0xbp4lhu8" path="res://scripts/player_testnew.gd" id="1_hqtel"]
 [ext_resource type="Material" uid="uid://davy0aohn5gpg" path="res://materials/Metal.tres" id="2_i3pqv"]
 [ext_resource type="Script" uid="uid://cfcrd464t0lnh" path="res://scripts/fps_counter.gd" id="2_onrkg"]
 [ext_resource type="AudioStream" uid="uid://cewgkhwwora0m" path="res://sounds/Electricity.mp3" id="4_hqtel"]
@@ -56,6 +56,8 @@ show_percentage = false
 offset_left = 6.0
 offset_right = 46.0
 offset_bottom = 23.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 5
 script = ExtResource("2_onrkg")
 
 [node name="Electricity" type="AudioStreamPlayer3D" parent="." unique_id=1827098465]

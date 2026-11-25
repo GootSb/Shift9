@@ -7,6 +7,9 @@ extends CharacterBody3D
 @export var deceleration: float = 25.0
 @export var gravity: float = 20.0
 
+@export_group("Heavy Object Effects")
+@export_range(0.05, 1.0, 0.05) var heavy_charge_speed_multiplier: float = 0.5
+
 @export_group("Jump")
 @export var min_jump_velocity: float = 4.5
 @export var max_jump_velocity: float = 12.0
@@ -21,6 +24,10 @@ extends CharacterBody3D
 @export var head_bob_frequency: float = 9.0
 @export var head_bob_amount: float = 0.06
 @export var head_bob_smoothing: float = 10.0
+@export var camera_lean_degrees: float = 3.0
+@export var camera_fov_boost: float = 5.0
+@export var landing_dip_strength: float = 0.018
+@export var landing_dip_max: float = 0.22
 
 @export_group("Freecam")
 @export var freecam_speed: float = 8.0
@@ -55,8 +62,11 @@ extends CharacterBody3D
 
 var camera_pitch: float = 0.0
 var camera_rest_position: Vector3
+var camera_rest_fov: float = 75.0
 var head_bob_time: float = 0.0
 var head_bob_offset: Vector3 = Vector3.ZERO
+var landing_dip: float = 0.0
+var movement_input_x: float = 0.0
 
 var is_charging_jump: bool = false
 var jump_charge: float = 0.0
@@ -85,10 +95,10 @@ var zap_outer_material: StandardMaterial3D
 var zap_middle_material: StandardMaterial3D
 var zap_core_material: StandardMaterial3D
 
-
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	camera_rest_position = camera.position
+	camera_rest_fov = camera.fov
 
 	jump_charge_bar.min_value = 0.0
 	jump_charge_bar.max_value = 100.0
@@ -102,7 +112,6 @@ func _ready() -> void:
 
 	electricity_sound.stop()
 	create_zap_effect()
-
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
@@ -164,7 +173,6 @@ func _input(event: InputEvent) -> void:
 					else:
 						pickup_interactable()
 
-
 func _physics_process(delta: float) -> void:
 	if freecam_enabled:
 		handle_freecam(delta)
@@ -176,14 +184,22 @@ func _physics_process(delta: float) -> void:
 	handle_head_bob(delta)
 	handle_held_object(delta)
 	update_throw_charge_bar(delta)
+
+	var was_on_floor := is_on_floor()
+	var downward_speed := velocity.y
 	move_and_slide()
 
+	if not was_on_floor and is_on_floor() and downward_speed < 0.0:
+		landing_dip = minf(absf(downward_speed) * landing_dip_strength, landing_dip_max)
+
+func is_holding_heavy_object() -> bool:
+	return is_instance_valid(held_object) and held_object.is_in_group("Heavy")
 
 func get_current_move_speed() -> float:
-	if is_instance_valid(held_object) and held_object.is_in_group("Heavy"):
-		return heavy_move_speed
-	return move_speed
+	return heavy_move_speed if is_holding_heavy_object() else move_speed
 
+func get_charge_speed_multiplier() -> float:
+	return clampf(heavy_charge_speed_multiplier, 0.05, 1.0) if is_holding_heavy_object() else 1.0
 
 func handle_movement(delta: float) -> void:
 	var input_dir := Input.get_vector(
@@ -191,6 +207,7 @@ func handle_movement(delta: float) -> void:
 	)
 	var direction := (transform.basis * Vector3(input_dir.x, 0.0, input_dir.y)).normalized()
 	var target_speed := get_current_move_speed()
+	movement_input_x = input_dir.x
 
 	if direction.length_squared() > 0.0001:
 		velocity.x = move_toward(velocity.x, direction.x * target_speed, acceleration * delta)
@@ -198,7 +215,6 @@ func handle_movement(delta: float) -> void:
 	else:
 		velocity.x = move_toward(velocity.x, 0.0, deceleration * delta)
 		velocity.z = move_toward(velocity.z, 0.0, deceleration * delta)
-
 
 func handle_jump(delta: float) -> void:
 	if not is_on_floor():
@@ -209,7 +225,10 @@ func handle_jump(delta: float) -> void:
 		return
 
 	if is_charging_jump:
-		jump_charge = minf(jump_charge + delta, maxf(jump_charge_time, 0.0))
+		jump_charge = minf(
+			jump_charge + delta * get_charge_speed_multiplier(),
+			maxf(jump_charge_time, 0.0)
+		)
 		jump_charge_bar.show()
 		jump_charge_bar.value = get_jump_charge_percentage() * 100.0
 
@@ -220,12 +239,10 @@ func handle_jump(delta: float) -> void:
 		jump_charge = 0.0
 		jump_charge_bar.hide()
 
-
 func get_jump_charge_percentage() -> float:
 	if jump_charge_time <= 0.0:
 		return 1.0
 	return clampf(jump_charge / jump_charge_time, 0.0, 1.0)
-
 
 func handle_gravity(delta: float) -> void:
 	if not is_on_floor():
@@ -233,21 +250,29 @@ func handle_gravity(delta: float) -> void:
 	elif velocity.y < 0.0:
 		velocity.y = 0.0
 
-
 func handle_head_bob(delta: float) -> void:
 	var horizontal_speed := Vector2(velocity.x, velocity.z).length()
+	var speed_ratio := clampf(horizontal_speed / maxf(move_speed, 0.01), 0.0, 1.0)
 	var moving := horizontal_speed > 0.1 and is_on_floor()
 	var target_offset := Vector3.ZERO
 
 	if head_bob_enabled and moving:
-		head_bob_time += delta * head_bob_frequency
-		target_offset.y = sin(head_bob_time) * head_bob_amount
-		target_offset.x = cos(head_bob_time * 0.5) * head_bob_amount * 0.5
+		head_bob_time += delta * lerpf(head_bob_frequency * 0.65, head_bob_frequency, speed_ratio)
+		target_offset.y = sin(head_bob_time) * head_bob_amount * speed_ratio
+		target_offset.x = cos(head_bob_time * 0.5) * head_bob_amount * 0.5 * speed_ratio
+
+	landing_dip = move_toward(landing_dip, 0.0, delta * 0.8)
+	target_offset.y -= landing_dip
 
 	var blend := 1.0 - exp(-maxf(head_bob_smoothing, 0.0) * delta)
 	head_bob_offset = head_bob_offset.lerp(target_offset, blend)
 	camera.position = camera_rest_position + head_bob_offset
 
+	var target_lean := -movement_input_x * deg_to_rad(camera_lean_degrees)
+	head.rotation.z = lerp_angle(head.rotation.z, target_lean, blend)
+
+	var target_fov := camera_rest_fov + camera_fov_boost * speed_ratio
+	camera.fov = lerpf(camera.fov, target_fov, blend)
 
 func pickup_interactable() -> void:
 	var space_state := get_world_3d().direct_space_state
@@ -278,7 +303,6 @@ func pickup_interactable() -> void:
 
 	start_zap()
 
-
 func handle_held_object(delta: float) -> void:
 	if not is_instance_valid(held_object):
 		if held_object != null:
@@ -292,7 +316,6 @@ func handle_held_object(delta: float) -> void:
 	held_object.global_rotation = camera.global_rotation
 	update_zap_effect(delta)
 
-
 func restore_object_physics(object: RigidBody3D, force_unfreeze: bool = false) -> void:
 	if not is_instance_valid(object):
 		return
@@ -301,14 +324,12 @@ func restore_object_physics(object: RigidBody3D, force_unfreeze: bool = false) -
 	object.freeze_mode = original_freeze_mode
 	object.freeze = false if force_unfreeze else original_freeze
 
-
 func clear_held_reference() -> void:
 	held_object = null
 	is_charging_throw = false
 	throw_charge = 0.0
 	throw_charge_bar.hide()
 	throw_charge_bar.value = 0.0
-
 
 func drop_object() -> void:
 	if not is_instance_valid(held_object):
@@ -325,7 +346,6 @@ func drop_object() -> void:
 	clear_held_reference()
 	stop_zap()
 
-
 func start_throw_charge() -> void:
 	if not is_instance_valid(held_object) or is_charging_throw:
 		return
@@ -334,21 +354,21 @@ func start_throw_charge() -> void:
 	throw_charge_bar.value = 0.0
 	throw_charge_bar.show()
 
-
 func update_throw_charge_bar(delta: float) -> void:
 	if not is_charging_throw or not is_instance_valid(held_object):
 		throw_charge_bar.hide()
 		return
-	throw_charge = minf(throw_charge + delta, maxf(throw_charge_time, 0.0))
+	throw_charge = minf(
+		throw_charge + delta * get_charge_speed_multiplier(),
+		maxf(throw_charge_time, 0.0)
+	)
 	throw_charge_bar.value = get_throw_charge_percentage() * 100.0
 	throw_charge_bar.show()
-
 
 func get_throw_charge_percentage() -> float:
 	if throw_charge_time <= 0.0:
 		return 1.0
 	return clampf(throw_charge / throw_charge_time, 0.0, 1.0)
-
 
 func throw_object() -> void:
 	if not is_charging_throw:
@@ -371,7 +391,6 @@ func throw_object() -> void:
 	stop_zap()
 	object.apply_central_impulse(direction * force)
 
-
 func make_zap_material(color: Color, energy: float, alpha: float) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -383,7 +402,6 @@ func make_zap_material(color: Color, energy: float, alpha: float) -> StandardMat
 	material.emission = color
 	material.emission_energy_multiplier = energy
 	return material
-
 
 func create_zap_effect() -> void:
 	zap_mesh = ImmediateMesh.new()
@@ -398,7 +416,6 @@ func create_zap_effect() -> void:
 	zap_core_material = make_zap_material(Color(0.75, 0.95, 1.0), zap_glow, 1.0)
 	zap_mesh_instance.hide()
 
-
 func start_zap() -> void:
 	if not is_instance_valid(zap_mesh_instance):
 		return
@@ -409,7 +426,6 @@ func start_zap() -> void:
 		electricity_sound.play()
 	update_zap_effect(0.0)
 
-
 func stop_zap() -> void:
 	zap_active = false
 	if is_instance_valid(zap_mesh):
@@ -418,7 +434,6 @@ func stop_zap() -> void:
 		zap_mesh_instance.hide()
 	if is_instance_valid(electricity_sound) and electricity_sound.playing:
 		electricity_sound.stop()
-
 
 func draw_zap_ribbon(points: Array[Vector3], side: Vector3, width: float, material: Material) -> void:
 	if points.size() < 2:
@@ -438,7 +453,6 @@ func draw_zap_ribbon(points: Array[Vector3], side: Vector3, width: float, materi
 		zap_mesh.surface_add_vertex(d)
 		zap_mesh.surface_add_vertex(c)
 	zap_mesh.surface_end()
-
 
 func generate_zap_points(
 	start_position: Vector3,
@@ -461,7 +475,6 @@ func generate_zap_points(
 			point += perpendicular * randf_range(-safe_jaggedness, safe_jaggedness) * falloff
 		points.append(point)
 	return points
-
 
 func update_zap_effect(delta: float) -> void:
 	if not zap_active or not is_instance_valid(zap_mesh_instance):
@@ -523,7 +536,6 @@ func update_zap_effect(delta: float) -> void:
 		)
 		draw_zap_ribbon(branch_points, side, zap_core_width * 1.5, zap_middle_material)
 
-
 func toggle_freecam() -> void:
 	if not freecam_enabled:
 		if is_instance_valid(held_object):
@@ -548,10 +560,12 @@ func toggle_freecam() -> void:
 		rotation.y = saved_player_rotation
 		camera_pitch = saved_camera_pitch
 		head.rotation.x = camera_pitch
+		head.rotation.z = 0.0
 		head_bob_offset = Vector3.ZERO
+		landing_dip = 0.0
 		camera.position = camera_rest_position
 		camera.rotation = Vector3.ZERO
-
+		camera.fov = camera_rest_fov
 
 func handle_freecam(delta: float) -> void:
 	var speed := freecam_fast_speed if Input.is_key_pressed(KEY_SHIFT) else freecam_speed
@@ -576,7 +590,6 @@ func handle_freecam(delta: float) -> void:
 
 	camera.global_position = freecam_position
 	camera.global_rotation = freecam_rotation
-
 
 func _exit_tree() -> void:
 	if is_instance_valid(held_object):
